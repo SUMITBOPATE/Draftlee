@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@custom-variant dark (&:where(.dark, .dark *));
 /* ============================================
    BASE LAYER - Global Resets & Defaults
    ============================================ */
@@ -19,6 +19,18 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
+html, body {
+  background-color: #EDEDED;
+}
+/* Prevent theme flicker on load */
+html:not(.theme-ready) * {
+  transition: none !important;
+}
+
+.dark html, .dark body {
+  background-color: #1a1613;
+}
+
 
   body {
     background-color: #EDEDED;
@@ -26,6 +38,12 @@
     font-family: var(--font-family-mono);
     line-height: 1.6;
     min-height: 100vh;
+  }
+
+  /* Dark Mode Body */
+  :root.dark body {
+    background-color: #1a1613;
+    color: #e8e6e1;
   }
 
   /* Typography Defaults */
@@ -91,10 +109,29 @@
     background: #9ca3af;
   }
 
+  /* Dark Mode Scrollbar */
+  :root.dark ::-webkit-scrollbar-track {
+    background: #2a2520;
+  }
+
+  :root.dark ::-webkit-scrollbar-thumb {
+    background: #4a443f;
+  }
+
+  :root.dark ::-webkit-scrollbar-thumb:hover {
+    background: #5a544f;
+  }
+
   /* Selection */
   ::selection {
     background-color: rgba(26, 26, 26, 0.1);
     color: var(--color-ink);
+  }
+
+  /* Dark Mode Selection */
+  :root.dark ::selection {
+    background-color: rgba(232, 230, 225, 0.2);
+    color: #e8e6e1;
   }
 }
 
@@ -231,6 +268,7 @@
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -238,17 +276,11 @@
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-/* globals.css */
-/* .ProseMirror {
-  @apply min-h-[100px] p-4 outline-none;
-} */
-/* globals.css */
-/* .ProseMirror {
-  @apply h-[100px] overflow-y-auto p-4;
-} */
+
 .ProseMirror p {
   @apply m-0 ;
 }
@@ -267,22 +299,94 @@
   @apply outline-none;
     @apply text-3xl font-bold;
 }
+*/* ===============================
+   TIPTAP PLACEHOLDER — FINAL
+   =============================== */
 
-/* Body */
-.body-editor .ProseMirror {
-  @apply min-h-0 overflow-y-auto outline-none;
+/* Base editor */
+.ProseMirror {
+  background: transparent;
+  color: inherit;
+  caret-color: currentColor;
 }
 
-
-.title-editor .ProseMirror p.is-editor-empty:first-child::before {
+/* Placeholder (works for new + old Tiptap) */
+.ProseMirror p.is-empty::before,
+.ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
-  @apply text-gray-400 pointer-events-none;
+  color: #9ca3af; /* neutral-400 */
+  pointer-events: none;
   float: left;
   height: 0;
 }
- .body-editor .ProseMirror p.is-editor-empty:first-child::before {
-  content: attr(data-placeholder);
-  @apply text-gray-400 pointer-events-none;
-  float: left;
-  height: 0;  }
 
+/* Dark mode placeholder */
+.dark .ProseMirror p.is-empty::before,
+.dark .ProseMirror p.is-editor-empty:first-child::before {
+  color: #6b7280; /* neutral-500 */
+
+}
+
+/* Remove focus outline */
+.ProseMirror:focus,
+.ProseMirror-focused {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Selection */
+.ProseMirror ::selection {
+  background: rgba(96, 165, 250, 0.35);
+}
+
+.dark .ProseMirror ::selection {
+  background: rgba(147, 197, 253, 0.35);
+}
+
+.tippy-box {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+.ProseMirror:focus {
+  outline: none;
+}
+
+.ProseMirror-focused {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Base editor */
+.ProseMirror {
+  background: transparent;
+  color: inherit;
+  
+}
+
+/* Dark mode editor surface */
+.dark .ProseMirror {
+  color: #e5e7eb; /* neutral-200 */
+}
+
+/* Selection */
+.ProseMirror ::selection {
+  background: rgba(96, 165, 250, 0.35);
+}
+
+.dark .ProseMirror ::selection {
+  background: rgba(147, 197, 253, 0.35);
+}
+
+/* Placeholder text */
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #9ca3af;
+}
+
+.dark .ProseMirror p.is-editor-empty:first-child::before {
+  color: #6b7280;
+}
+
+/* Caret color */
+.ProseMirror {
+  caret-color: currentColor;
+}

@@ -242,7 +242,8 @@
 import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Editor from "./components/Editor/Editor";
-
+import { PanelRightClose, SquarePlus, Moon, Sun } from "lucide-react";
+import { useDarkMode } from "./contexts/DarkModeContext";
 import {
   getAllPages,
   addPage,
@@ -250,7 +251,9 @@ import {
   deletePage,
 } from "./db/db";
 
+
 function App() {
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [pages, setPages] = useState([]);
   const [selectedPageId, setSelectedPageId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -380,7 +383,7 @@ setPages((prevPages) => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#fdfcfb]">
+    <div className="flex min-h-screen bg-[#fdfcfb] dark:bg-[#1a1613] transition-colors duration-300">
       <Sidebar
         pages={pages}
         selectedPageId={selectedPageId}
@@ -393,7 +396,7 @@ setPages((prevPages) => {
 
       <div className="flex-1 flex flex-col relative overflow-hidden pb-16">
         {selectedPage && (
-          <div className="flex-1 overflow-y-auto pl-16">
+          <div className="flex-1 overflow-y-auto pt-2.5 pl-16">
             <Editor
               page={selectedPage}
               onContentChange={handleBodyChange}
@@ -403,54 +406,35 @@ setPages((prevPages) => {
         )}
       </div>
 
-      {/* Bottom Icon Bar - Minimal & Distraction-Free */}
+      {/* Top Icon Bar - Minimal & Distraction-Free */}
       <div 
-        className="fixed bottom-0 left-0 h-20 flex items-center px-4 gap-2 z-30 opacity-20 hover:opacity-100 transition-opacity duration-500 ease-out group"
+        className="fixed top-0 left-0 h-18 flex items-center px-4 gap-2 z-30 opacity-20 hover:opacity-100 transition-opacity duration-500 ease-out group"
       >
         {/* Sidebar toggle - hover to open */}
         <button 
-          className="p-2.5 text-ink/40 hover:text-ink/70 hover:bg-ink/5 rounded-sm transition-all duration-200 ease-out cursor-pointer active:scale-95 active:opacity-70"
+          className="p-2.5 text-ink/40 dark:text-gray-400 hover:text-ink/70 dark:hover:text-gray-200 hover:bg-ink/5 dark:hover:bg-white/5 rounded-sm transition-all duration-200 ease-out cursor-pointer active:scale-95 active:opacity-70"
           onMouseEnter={() => setIsSidebarOpen(true)}
           aria-label="Toggle Sidebar"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={`transition-transform duration-400 ease-out ${isSidebarOpen ? 'rotate-0' : 'rotate-180'}`}
-          >
-            <rect width="18" height="18" x="3" y="3" rx="2"/>
-            <path d="M9 3v18"/>
-            <path d="m14 9 3 3-3 3"/>
-          </svg>
+          <PanelRightClose className={`transition-transform duration-400 ease-out ${isSidebarOpen ? 'rotate-0' : 'rotate-180'}`} size={16} />
         </button>
 
-        {/* New Page - Slightly more prominent */}
+        {/* New Page Button */}
         <button
           onClick={handleNewPage}
-          className="p-2.5 text-ink/50 hover:text-ink/80 hover:bg-ink/8 rounded-sm transition-all duration-200 ease-out active:scale-95 active:opacity-70"
-          aria-label="New Page"
+          className="flex items-center justify-between w-full px-3 py-2 text-[#8b7355]/70 dark:text-[#c5a059]/70 hover:text-[#8b7355] dark:hover:text-[#c5a059] hover:bg-[#e5e0d8]/50 dark:hover:bg-white/5 rounded-lg border border-dashed border-[#8b7355]/30 dark:border-[#c5a059]/30 transition-all group"
         >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="18" 
-            height="18" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="1.75" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          >
-            <path d="M5 12h14"/>
-            <path d="M12 5v14"/>
-          </svg>
+          <span className="text-xs font-semibold uppercase tracking-wider">Add Document</span>
+          <SquarePlus size={16} />
+        </button>
+
+        {/* Dark Mode Toggle */}
+        <button
+          onClick={toggleDarkMode}
+          className="p-2.5 text-ink/40 dark:text-gray-400 hover:text-ink/70 dark:hover:text-gray-200 hover:bg-ink/5 dark:hover:bg-white/5 rounded-sm transition-all duration-200 ease-out cursor-pointer active:scale-95 active:opacity-70"
+          aria-label="Toggle Dark Mode"
+        >
+          {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
         </button>
       </div>
     </div>

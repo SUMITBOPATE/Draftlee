@@ -1,78 +1,4 @@
-// // src/editor/TitleTiptap.js
-// import { useEditor } from "@tiptap/react";
-// import StarterKit from "@tiptap/starter-kit";
-// import { Placeholder } from '@tiptap/extensions/placeholder'
 
-// // export function useTitleEditor(bodyEditor, { onUpdate } = {}) {
-// //   return useEditor({
-// //     extensions: [
-// //       StarterKit.configure({
-// //         heading: false,
-// //         bulletList: false,
-// //         orderedList: false,
-// //         blockquote: false,
-// //         codeBlock: false,
-// //       }),
-// //       Placeholder.configure({
-// //         placeholder: "Untitled",
-// //         emptyEditorClass: "is-editor-empty",
-// //       }),
-// //     ],
-// //     editorProps: {
-// //       handleKeyDown(_, event) {
-// //         if (event.key === "Enter") {
-// //           bodyEditor?.commands.focus("start");
-// //           return true;
-// //         }
-// //         return false;
-// //       },
-// //     },
-// //     onUpdate({ editor }) {
-// //       const text = editor.getText();
-
-// //       // 🔒 critical guards
-// //       if (!editor.isFocused) return;
-// //       if (text === "") return;
-
-// //       onUpdate?.(text);
-// //     },
-// //   });
-// // }
-// export function useTitleEditor(bodyEditor, { onUpdate } = {}) {
-//   return useEditor({
-//     extensions: [
-//       StarterKit.configure({
-//         heading: false,
-//         bulletList: false,
-//         orderedList: false,
-//         blockquote: false,
-//         codeBlock: false,
-//       }),
-//       Placeholder.configure({
-//         placeholder: "Untitled",
-//         emptyEditorClass: "is-editor-empty",
-//       }),
-//     ],
-//     editorProps: {
-//       handleKeyDown(_, event) {
-//         if (event.key === "Enter") {
-//           bodyEditor?.commands.focus("start");
-//           return true;
-//         }
-//         return false;
-//       },
-//     },
-//     onUpdate({ editor }) {
-//       const text = editor.getText();
-
-//       // 🔒 critical guards
-//       if (!editor.isFocused) return;
-//       if (text === "") return;
-
-//       onUpdate?.(text);
-//     },
-//   });
-// }
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Placeholder } from '@tiptap/extensions/placeholder'
@@ -92,6 +18,7 @@ export function useTitleEditor(bodyEditor, { onUpdate } = {}) {
       Placeholder.configure({
         placeholder: "Untitled",
         emptyEditorClass: "is-editor-empty",
+        emptyNodeClass: "is-editor-empty",
       }),
     ],
     editorProps: {
