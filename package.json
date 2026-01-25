@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",
+    "@tiptap/core": "^3.14.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.2",
     "@tiptap/extension-bold": "^3.14.0",
     "@tiptap/extension-bubble-menu": "^3.14.0",
     "@tiptap/extension-italic": "^3.14.0",

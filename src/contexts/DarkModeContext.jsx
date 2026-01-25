@@ -1,16 +1,12 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext,  useState, useEffect } from "react";
 
 const DarkModeContext = createContext(null);
 
-export const useDarkMode = () => {
-  const context = useContext(DarkModeContext);
-  if (!context) {
-    throw new Error("useDarkMode must be used within DarkModeProvider");
-  }
-  return context;
-};
+export { DarkModeContext };
 
-export function DarkModeProvider({ children }) {
+
+
+export const DarkModeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const stored = localStorage.getItem("darkMode");
     if (stored !== null) return stored === "true";
@@ -29,4 +25,4 @@ export function DarkModeProvider({ children }) {
       {children}
     </DarkModeContext.Provider>
   );
-}
+};

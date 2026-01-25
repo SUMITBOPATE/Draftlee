@@ -1,17 +1,17 @@
-export default function ToolbarButton({ active, onClick, children }) {
+export default function ToolbarButton({ active, onClick, children, title }) {
   return (
     <button
       onClick={onClick}
+      title={title}
       className={`
         flex items-center justify-center
-        w-9 h-9 rounded-lg transition-all duration-200 ease-in-out
-        /* When active, we slightly darken the icon and add a very faint background */
+        w-8 h-8 transition-all duration-300 ease-out
         ${active
-          ? "text-neutral-900 dark:text-neutral-100 bg-neutral-100/50 dark:bg-neutral-700/50 font-bold" 
-          : "text-neutral-400 dark:text-neutral-500 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 hover:text-neutral-700 dark:hover:text-neutral-300"}
+          ? "text-[var(--color-accent)] bg-[var(--color-paper-dark)]"
+          : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] hover:bg-[var(--color-paper-darker)]"}
       `}
     >
-      <div className={`transition-transform duration-200 ${active ? "scale-105" : "scale-100"}`}>
+      <div className={`transition-all duration-200 ${active ? "scale-110" : "scale-100"}`}>
         {children}
       </div>
     </button>

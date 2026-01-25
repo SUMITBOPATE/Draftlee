@@ -1,5 +1,5 @@
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { EditorContent } from "@tiptap/react";
 import { useBodyEditor } from "./BodyTiptap";
 import { useTitleEditor } from "./TitleTiptap";
@@ -12,19 +12,29 @@ import  BubbleToolbar from "../Toolbar/BubbleToolbar";
 
 
 
-const Editor = ({ page, onTitleChange, onContentChange }) => {
+const Editor = forwardRef(({ page, onTitleChange, onContentChange, onEditorReady }, ref) => {
+  const containerRef = useRef(null);
+
+  useImperativeHandle(ref, () => containerRef.current);
 
 
 
 
 
-  
+
   // ---------------- BODY EDITOR ----------------
    const bodyEditor = useBodyEditor({
         onUpdate: ({ editor }) => {
         onContentChange(editor.getJSON());
     },
   });
+
+  // Notify parent when editor is ready
+  useEffect(() => {
+    if (bodyEditor && onEditorReady) {
+      onEditorReady(bodyEditor);
+    }
+  }, [bodyEditor, onEditorReady]);
 
 
 
@@ -78,7 +88,7 @@ const Editor = ({ page, onTitleChange, onContentChange }) => {
   if (!page) return null;
 
   return (
-  <div className="w-full max-w-3xl mx-auto px-8 pt-20 min-h-screen bg-[#fdfcfb] dark:bg-[#1a1613]  text-neutral-900 dark:text-neutral-100 space-y-10 transition-colors duration-300">
+  <div ref={containerRef} className="w-full max-w-3xl mx-auto px-8 pt-20 min-h-screen bg-[var(--color-paper)] dark:bg-[var(--color-paper)] text-[var(--color-ink)] space-y-10 transition-colors duration-300">
        <BubbleMenu
         editor={bodyEditor}
          shouldShow={({ editor }) => {
@@ -107,6 +117,8 @@ const Editor = ({ page, onTitleChange, onContentChange }) => {
 
     </div>
   );
-};
+});
+
+Editor.displayName = 'Editor';
 
 export default Editor;

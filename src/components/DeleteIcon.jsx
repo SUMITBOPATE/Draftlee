@@ -1,5 +1,5 @@
-// components/DeleteIcon.jsx
-'use client';
+
+
 
 import React, { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 // eslint-disable-next-line no-unused-vars
