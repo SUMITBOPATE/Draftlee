@@ -4,8 +4,8 @@ import StarterKit from "@tiptap/starter-kit";
 import { Placeholder } from '@tiptap/extensions/placeholder'
 
 export function useTitleEditor(bodyEditor, { onUpdate } = {}) {
-  return useEditor({
-    content: " ",
+  const editor = useEditor({
+    content: "",
     extensions: [
       StarterKit.configure({
         heading: false,
@@ -13,7 +13,7 @@ export function useTitleEditor(bodyEditor, { onUpdate } = {}) {
         orderedList: false,
         blockquote: false,
         codeBlock: false,
-        hardBreak: false, // Prevent line breaks in title
+        hardBreak: false,
       }),
       Placeholder.configure({
         placeholder: "Untitled",
@@ -23,7 +23,6 @@ export function useTitleEditor(bodyEditor, { onUpdate } = {}) {
     ],
     editorProps: {
       handleKeyDown(_, event) {
-        // On Enter, move focus to body editor
         if (event.key === "Enter") {
           event.preventDefault();
           bodyEditor?.commands.focus("start");
@@ -33,11 +32,11 @@ export function useTitleEditor(bodyEditor, { onUpdate } = {}) {
       },
     },
     onUpdate({ editor }) {
-      const text = editor.getText();
-      
-      // Call onUpdate with the current text (can be empty)
-      // The parent component decides what to do with it
+      // Only call onUpdate if there's actual content change
+      const text = editor.getText().trim();
       onUpdate?.(text);
     },
   });
+
+  return editor;
 }

@@ -52,19 +52,28 @@ const Editor = forwardRef(({ page, onTitleChange, onContentChange, onEditorReady
 
   // ---------------- LOAD PAGE CONTENT (ONCE PER PAGE) ----------------
   const lastLoadedPageId = useRef(null);
+  const lastLoadedContent = useRef(null);
 
   useEffect(() => {
     if (!page || !bodyEditor || !titleEditor) return;
-    if (lastLoadedPageId.current === page.id) return;
+
+    const contentChanged = lastLoadedContent.current !== page.content;
+    const isNewPage = lastLoadedPageId.current !== page.id;
+
+    // Only reload if switching pages OR content changed externally
+    if (!isNewPage && !contentChanged) return;
 
     // Load content without triggering update handlers
     titleEditor.commands.setContent(page.title || "", false);
     bodyEditor.commands.setContent(page.content || "", false);
 
-    bodyEditor.commands.focus("end");
+    if (isNewPage) {
+      bodyEditor.commands.focus("end");
+    }
 
     lastLoadedPageId.current = page.id;
-  }, [page?.id, bodyEditor, titleEditor, page]);
+    lastLoadedContent.current = page.content;
+  }, [page?.id, page?.title, page?.content, bodyEditor, titleEditor, page]);
 
   // ---------------- PERSIST TITLE (ON BLUR) ----------------
   useEffect(() => {

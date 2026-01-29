@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import getTimeAgo from '../utils/time';
-import { Clock, Search, X, FileText } from 'lucide-react';
+import { Clock, Search, X, FileText, Trash2 } from 'lucide-react';
 import DeleteIcon from './DeleteIcon';
 
 function Sidebar({
@@ -20,6 +20,7 @@ function Sidebar({
   pagesWithTextMatches
 }) {
   const [localSearchMode, setLocalSearchMode] = useState('pages');
+  const [deleteConfirm, setDeleteConfirm] = useState(null); // pageId to delete
 
   const handlePageSearchChange = (e) => {
     setPageSearchQuery(e.target.value);
@@ -55,6 +56,17 @@ function Sidebar({
 
   const hasResults = displayPages && displayPages.length > 0;
   const showNoResults = !hasResults && (pageSearchQuery || textSearchQuery);
+
+  const confirmDelete = () => {
+    if (deleteConfirm) {
+      handleDeletePage(deleteConfirm);
+      setDeleteConfirm(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirm(null);
+  };
 
   return (
     <aside
@@ -168,7 +180,7 @@ function Sidebar({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleDeletePage(page.id);
+                    setDeleteConfirm(page.id);
                   }}
                   className="p-1 text-[var(--color-ink-muted)] hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
                 >
@@ -196,6 +208,35 @@ function Sidebar({
           Minimal Writer
         </p>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirm && (
+        <div className="absolute inset-0 bg-[var(--color-paper)]/70 dark:bg-[var(--color-paper-dark)]/70 flex items-center justify-center z-50">
+          <div className="text-center px-6">
+            <Trash2 size={32} className="mx-auto mb-3 text-[var(--color-accent)]" />
+            <p className="text-sm text-[var(--color-ink)] mb-2">
+              Delete this document?
+            </p>
+            <p className="text-xs text-[var(--color-ink-muted)] mb-6">
+              This action cannot be reverted.
+            </p>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={cancelDelete}
+                className="px-4 py-1.5 text-xs text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] border border-[var(--border-medium)] hover:border-[var(--color-ink)] transition-colors"
+              >
+                No
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-1.5 text-xs bg-[var(--color-ink)] text-[var(--color-paper)] hover:bg-[var(--color-accent)] transition-colors"
+              >
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }

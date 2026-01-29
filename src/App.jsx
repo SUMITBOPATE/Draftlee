@@ -199,11 +199,29 @@ function App() {
   };
 
   const handleDeletePage = async (pageId) => {
-    
-if(pages.length==1) return;
-await deletePage(pageId);
-   
-setPages((prevPages) => {
+    if (pages.length === 1) {
+      // Clear the last page content and make it "new"
+      const clearedPage = {
+        title: '',
+        content: '',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      };
+      await updatePage(pageId, clearedPage);
+      setPages((prev) =>
+        prev.map((p) =>
+          p.id === pageId
+            ? { ...p, ...clearedPage }
+            : p
+        )
+      );
+      setSelectedPageId(pageId);
+      return;
+    }
+
+    await deletePage(pageId);
+
+    setPages((prevPages) => {
       const updatedPages = prevPages.filter(
         (page) => page.id !== pageId
       );
